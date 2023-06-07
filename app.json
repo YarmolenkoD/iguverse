@@ -28,6 +28,6 @@
     "web": {
       "favicon": "./assets/favicon.jpeg"
     },
-    "scheme": "iguverse"
+    "scheme": ["iguverse", "fb188638327485303"]
   }
 }

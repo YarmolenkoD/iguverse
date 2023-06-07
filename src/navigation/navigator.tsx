@@ -4,6 +4,8 @@ import { CompositeNavigationProp, NavigationContainer } from '@react-navigation/
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 import { Login, Home } from '@screens'
+import { NavigationRef } from '@services'
+import { useUser } from '@hooks'
 
 export type INavigator = {
   Login: undefined
@@ -18,14 +20,19 @@ export type NavigationProp = CompositeNavigationProp<
 export const Stack = createNativeStackNavigator<INavigator>()
 
 export const Navigator = () => {
+  const user = useUser()
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={NavigationRef}>
       <Stack.Navigator
         screenOptions={{ header: () => null }}
         initialRouteName="Login"
       >
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Home" component={Home} />
+        {
+          user.isAuth
+            ? <Stack.Screen name="Home" component={Home} />
+            : <Stack.Screen name="Login" component={Login} />
+        }
       </Stack.Navigator>
     </NavigationContainer>
   )

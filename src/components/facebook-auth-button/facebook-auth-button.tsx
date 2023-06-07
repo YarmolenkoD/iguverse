@@ -1,43 +1,59 @@
-import React, { memo, useEffect } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 
-import { Button } from 'react-native'
+import { Alert, Button } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
-import * as Google from 'expo-auth-session/providers/google'
+import * as Facebook from 'expo-auth-session/providers/facebook'
 
-import { GoogleService } from '@services'
+import { ERROR_MESSAGE } from '@constants'
 import { NavigationProp } from '@navigation'
+import { FacebookService } from '@services'
+import { FACEBOOK_CLIENT_ID } from '@env'
+import { Loader } from '@components'
 
 export const FacebookAuthButton = memo(() => {
   const navigation = useNavigation<NavigationProp>()
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: '214155279338-11ffl50ed8n0s5nbabn170dmjss24gde.apps.googleusercontent.com',
-    iosClientId: '214155279338-99cabngnu3sul5td933lho2fbs1d54ff.apps.googleusercontent.com',
-    webClientId: '214155279338-tegv3n38b495v99240ugop549b1i2t7n.apps.googleusercontent.com',
-  })
+  const [loading, setLoading] = useState(false)
+
+  const [request, response, promptAsync] = Facebook.useAuthRequest({
+    clientId: FACEBOOK_CLIENT_ID,
+    scopes: ['public_profile', 'email'],
+  }, { useProxy: true })
 
   useEffect(() => {
     handleSignIn()
-  }, [])
+  }, [response])
 
   const handleSignIn = async () => {
-    console.log(111111144, response)
-    if (response?.type === 'success') {
-      GoogleService.getUserInfo(response.authentication?.accessToken)
+    if (response?.type === 'success' && response?.authentication?.accessToken) {
+      setLoading(true)
+
+      await FacebookService.getUserInfo(response.authentication?.accessToken)
+
+      setLoading(false)
+
+      // navigation.navigate('Home')
+    } else if (response) {
+      Alert.alert(ERROR_MESSAGE)
     }
   }
 
   const signIn = async () => {
-    // const res = await promptAsync()
+    const result = await promptAsync()
 
-    navigation.navigate('Home')
+    if (result.type !== 'success') {
+      Alert.alert(ERROR_MESSAGE)
+    }
   }
 
-  return <Button
-    title="Sign in with Facebook"
-    disabled={!request}
-    onPress={signIn}
-  />
+  return <>
+    <Button
+      title="Sign in with Facebook"
+      disabled={!request}
+      onPress={signIn}
+    />
+    <Loader />
+  </>
 })

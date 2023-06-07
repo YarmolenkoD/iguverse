@@ -18,6 +18,8 @@ module.exports = function(api) {
             '@navigation': './src/navigation',
             '@types': './src/types',
             '@redux-store': './src/redux-store',
+            '@constants': './src/constants',
+            '@hooks': './src/hooks',
           },
         },
       ],

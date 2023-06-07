@@ -1,8 +1,8 @@
 import { Alert } from 'react-native'
 
-import { IUser } from '@types'
-import { ERROR_MESSAGE } from '@constants'
 import { setUserData, store } from '@redux-store'
+import { ERROR_MESSAGE } from '@constants'
+import { IUser } from '@types'
 
 const formatResponse = (response: any): IUser => {
   return {
@@ -13,13 +13,13 @@ const formatResponse = (response: any): IUser => {
   }
 }
 
-export const GoogleService = {
+export const FacebookService = {
   async getUserInfo (token = '') {
     if (!token) return
 
     try {
       const response = await fetch(
-        'https://www.googleapis.com/userinfo/v2/me',
+        `https://graph.facebook.com/me?access_token=${token}&fields=id,name,picture.type(large)`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

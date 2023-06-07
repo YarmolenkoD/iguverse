@@ -28,6 +28,14 @@
     "web": {
       "favicon": "./assets/favicon.jpeg"
     },
-    "scheme": ["iguverse", "fb188638327485303"]
+    "scheme": [
+      "iguverse",
+      "fb188638327485303"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a3bfa3f0-b08f-4b21-8922-79abbbac926d"
+      }
+    }
   }
 }

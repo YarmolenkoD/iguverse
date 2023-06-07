@@ -1,6 +1,17 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "strict": true
-  }
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/*"],
+      "@screens": ["src/screens"],
+      "@components": ["src/components"],
+      "@services": ["src/services"],
+      "@navigation": ["src/navigation"],
+      "@types": ["src/types"],
+      "@redux-store": ["src/redux-store"],
+    }
+  },
+  "include": ["src/**/*"]
 }
